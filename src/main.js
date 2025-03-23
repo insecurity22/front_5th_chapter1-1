@@ -252,6 +252,18 @@ const App = () => {
 
 const render = () => {
   document.body.innerHTML = App();
+
+  document.body.addEventListener("click", (e) => {
+    const isLink = e.target.tagName === "A" && e.target.href;
+    if (isLink) {
+      e.preventDefault();
+      const newPath = e.target.pathname;
+      history.pushState(null, "", newPath);
+      render();
+    }
+  });
 };
+
+window.addEventListener("popstate", render);
 
 render();
