@@ -1,16 +1,27 @@
-const Header = () => `
-  <header class="bg-blue-600 text-white p-4 sticky top-0">
-    <h1 class="text-2xl font-bold">항해플러스</h1>
-  </header>
+const Header = ({ isLoggedIn }) => {
+  const isActive = (path) =>
+    location.pathname === path ? "text-blue-600" : "text-gray-600";
 
-  <nav class="bg-white shadow-md p-2 sticky top-14">
-    <ul class="flex justify-around">
-      <li><a href="/" class="text-blue-600">홈</a></li>
-      <li><a href="/profile" class="text-gray-600">프로필</a></li>
-      <li><a href="#" class="text-gray-600">로그아웃</a></li>
-    </ul>
-  </nav>
-`;
+  return `
+    <header class="bg-blue-600 text-white p-4 sticky top-0">
+      <h1 class="text-2xl font-bold">항해플러스</h1>
+    </header>
+
+    <nav class="bg-white shadow-md p-2 sticky top-14">
+      <ul class="flex justify-around">
+        <li><a href="/" class=${isActive("/")}>홈</a></li>
+        <li><a href="/profile" class=${isActive("/profile")}>프로필</a></li>
+        <li>
+            ${
+              isLoggedIn
+                ? `<a href="#" class="${isActive("#")}">로그아웃</a>`
+                : `<a href="/login" class="${isActive("/login")}">로그인</a>`
+            }
+          </li>
+      </ul>
+    </nav>
+  `;
+};
 
 const Footer = () => `
   <footer class="bg-gray-200 p-4 text-center">
@@ -21,7 +32,7 @@ const Footer = () => `
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-     ${Header()}
+     ${Header({ isLoggedIn: false })}
 
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
@@ -146,7 +157,7 @@ const ProfilePage = () => `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-        ${Header()}
+        ${Header({ isLoggedIn: true })}
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
@@ -229,9 +240,18 @@ const ErrorPage = () => `
   </main>
 `;
 
-document.body.innerHTML = `
-  ${MainPage()}
-  ${ProfilePage()}
-  ${LoginPage()}
-  ${ErrorPage()}
-  `;
+const routes = {
+  "/": MainPage,
+  "/login": LoginPage,
+  "/profile": ProfilePage,
+};
+
+const App = () => {
+  return (routes[location.pathname] || ErrorPage)();
+};
+
+const render = () => {
+  document.body.innerHTML = App();
+};
+
+render();
