@@ -1,3 +1,5 @@
+import { navigate } from "./utils/navigation";
+
 const Header = ({ isLoggedIn }) => {
   const isActive = (path) =>
     location.pathname === path ? "text-blue-600" : "text-gray-600";
@@ -32,7 +34,7 @@ const Footer = () => `
 const MainPage = () => `
   <div class="bg-gray-100 min-h-screen flex justify-center">
     <div class="max-w-md w-full">
-     ${Header({ isLoggedIn: false })}
+     ${Header({ isLoggedIn: state.isLoggedIn })}
 
       <main class="p-4">
         <div class="mb-4 bg-white rounded-lg shadow p-4">
@@ -157,7 +159,7 @@ const ProfilePage = () => `
   <div id="root">
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-        ${Header({ isLoggedIn: true })}
+        ${Header({ isLoggedIn: state.isLoggedIn })}
 
         <main class="p-4">
           <div class="bg-white p-8 rounded-lg shadow-md">
@@ -240,6 +242,10 @@ const ErrorPage = () => `
   </main>
 `;
 
+const state = {
+  isLoggedIn: false,
+};
+
 const routes = {
   "/": MainPage,
   "/login": LoginPage,
@@ -247,6 +253,10 @@ const routes = {
 };
 
 const App = () => {
+  if (location.pathname === "/profile" && !state.isLoggedIn) {
+    navigate("/login", render);
+  }
+
   return (routes[location.pathname] || ErrorPage)();
 };
 
@@ -257,9 +267,7 @@ const render = () => {
     const isLink = e.target.tagName === "A" && e.target.href;
     if (isLink) {
       e.preventDefault();
-      const newPath = e.target.pathname;
-      history.pushState(null, "", newPath);
-      render();
+      navigate(e.target.href, render);
     }
   });
 };
