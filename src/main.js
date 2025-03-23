@@ -4,10 +4,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { NotFound } from "./components/NotFound";
 import { RootLayout } from "./layouts/RootLayout";
 import { navigate } from "./utils/navigation";
-
-const state = {
-  isLoggedIn: false,
-};
+import { getLocalStorage, setLocalStorage } from "./utils/storage";
 
 const routes = {
   "/": MainPage,
@@ -16,8 +13,7 @@ const routes = {
 };
 
 const App = () => {
-  const { isLoggedIn } = state;
-
+  const isLoggedIn = !!getLocalStorage("user");
   if (location.pathname === "/profile" && !isLoggedIn) {
     navigate("/login", render);
   }
@@ -30,16 +26,35 @@ const App = () => {
   return page;
 };
 
+const handleClick = (event) => {
+  const { target } = event;
+
+  const isLogout = target.id === "logout";
+  if (isLogout) {
+    localStorage.removeItem("user");
+  }
+
+  const isLink = target.tagName === "A" && target.href;
+  if (isLink) {
+    event.preventDefault();
+    navigate(target.href, render);
+  }
+};
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  const username = document.getElementById("username")?.value?.trim();
+  if (!username) return;
+
+  setLocalStorage("user", { username, email: "", bio: "" });
+  navigate("/", render);
+};
+
 export const render = () => {
   document.body.innerHTML = App();
-
-  document.body.addEventListener("click", (e) => {
-    const isLink = e.target.tagName === "A" && e.target.href;
-    if (isLink) {
-      e.preventDefault();
-      navigate(e.target.href, render);
-    }
-  });
+  document.body.addEventListener("click", handleClick);
+  document.body.addEventListener("submit", handleSubmit);
 };
 
 window.addEventListener("popstate", render);

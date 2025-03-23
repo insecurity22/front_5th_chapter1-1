@@ -14,7 +14,7 @@ export const Header = ({ isLoggedIn }) => {
         <li>
             ${
               isLoggedIn
-                ? `<a href="#" class="${isActive("#")}">로그아웃</a>`
+                ? `<a href="/" id="logout">로그아웃</a>`
                 : `<a href="/login" class="${isActive("/login")}">로그인</a>`
             }
           </li>
