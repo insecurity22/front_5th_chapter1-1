@@ -13,14 +13,16 @@ const routes = {
 };
 
 const App = () => {
-  const isLoggedIn = !!getLocalStorage("user");
-  if (location.pathname === "/profile" && !isLoggedIn) {
+  const user = getLocalStorage("user");
+
+  if (location.pathname === "/profile" && !user) {
     navigate("/login", render);
   }
 
-  const page = routes[location.pathname] || NotFound;
+  const pageComponent = routes[location.pathname];
+  const page = pageComponent ? pageComponent({ user }) : NotFound;
   if (location.pathname !== "/login") {
-    return RootLayout({ children: page, isLoggedIn });
+    return RootLayout({ children: page, isLoggedIn: !!user });
   }
 
   return page;
@@ -41,14 +43,32 @@ const handleClick = (event) => {
   }
 };
 
+const handleLogin = (username) => {
+  setLocalStorage("user", { username, email: "", bio: "" });
+  navigate("/", render);
+};
+
+const handleProfile = (username) => {
+  const email = document.getElementById("email")?.value?.trim();
+  const bio = document.getElementById("bio")?.value?.trim();
+
+  setLocalStorage("user", { username, email, bio });
+  alert("프로필이 업데이트 되었습니다.");
+};
+
 const handleSubmit = (event) => {
   event.preventDefault();
 
   const username = document.getElementById("username")?.value?.trim();
   if (!username) return;
 
-  setLocalStorage("user", { username, email: "", bio: "" });
-  navigate("/", render);
+  if (event.target.id === "login-form") {
+    handleLogin(username);
+  }
+
+  if (event.target.id === "profile-form") {
+    handleProfile(username);
+  }
 };
 
 export const render = () => {
