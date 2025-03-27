@@ -1,35 +1,10 @@
-import { HomePage } from "./pages/HomePage";
-import { LoginPage } from "./pages/LoginPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { NotFound } from "./components/NotFound";
-import { RootLayout } from "./layouts/RootLayout";
-import { navigate } from "./utils/navigation";
+import { App } from "./App";
+import { browserRouter } from "./utils/router";
 import {
   getLocalStorage,
   removeLocalStorage,
   setLocalStorage,
 } from "./utils/storage";
-
-const routes = {
-  "/": HomePage,
-  "/login": LoginPage,
-  "/profile": ProfilePage,
-};
-
-const App = ({ user }) => {
-  const currentUrl = location.pathname;
-  const pageComponent = routes[currentUrl];
-  if (!pageComponent) {
-    return NotFound();
-  }
-
-  const page = pageComponent({ user });
-  if (currentUrl !== "/login") {
-    return RootLayout({ children: page, user });
-  }
-
-  return page;
-};
 
 const handleClick = (event) => {
   const { target } = event;
@@ -37,19 +12,19 @@ const handleClick = (event) => {
   const isLogout = target.id === "logout";
   if (isLogout) {
     removeLocalStorage("user");
-    navigate("/", render);
+    browserRouter("/", render);
   }
 
   const isLink = target.tagName === "A" && target.href;
   if (isLink) {
     event.preventDefault();
-    navigate(target.href, render);
+    browserRouter(target.href, render);
   }
 };
 
 const handleLogin = (username) => {
   setLocalStorage("user", { username, email: "", bio: "" });
-  navigate("/", render);
+  browserRouter("/", render);
 };
 
 const handleProfile = (username) => {
@@ -79,7 +54,12 @@ export const render = () => {
   const user = getLocalStorage("user");
   const currentUrl = location.pathname;
   if (!user && currentUrl === "/profile") {
-    navigate("/login", render);
+    browserRouter("/login", render);
+    return;
+  }
+
+  if (user && currentUrl === "/login") {
+    browserRouter("/", render);
     return;
   }
 
