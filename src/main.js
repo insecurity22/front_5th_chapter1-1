@@ -4,7 +4,11 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { NotFound } from "./components/NotFound";
 import { RootLayout } from "./layouts/RootLayout";
 import { navigate } from "./utils/navigation";
-import { getLocalStorage, setLocalStorage } from "./utils/storage";
+import {
+  getLocalStorage,
+  removeLocalStorage,
+  setLocalStorage,
+} from "./utils/storage";
 
 const routes = {
   "/": MainPage,
@@ -12,17 +16,16 @@ const routes = {
   "/profile": ProfilePage,
 };
 
-const App = () => {
-  const user = getLocalStorage("user");
-
-  if (location.pathname === "/profile" && !user) {
-    navigate("/login", render);
+const App = ({ user }) => {
+  const currentUrl = location.pathname;
+  const pageComponent = routes[currentUrl];
+  if (!pageComponent) {
+    return NotFound();
   }
 
-  const pageComponent = routes[location.pathname];
-  const page = pageComponent ? pageComponent({ user }) : NotFound;
-  if (location.pathname !== "/login") {
-    return RootLayout({ children: page, isLoggedIn: !!user });
+  const page = pageComponent({ user });
+  if (currentUrl !== "/login") {
+    return RootLayout({ children: page, user });
   }
 
   return page;
@@ -33,7 +36,8 @@ const handleClick = (event) => {
 
   const isLogout = target.id === "logout";
   if (isLogout) {
-    localStorage.removeItem("user");
+    removeLocalStorage("user");
+    navigate("/", render);
   }
 
   const isLink = target.tagName === "A" && target.href;
@@ -72,7 +76,14 @@ const handleSubmit = (event) => {
 };
 
 export const render = () => {
-  document.body.innerHTML = App();
+  const user = getLocalStorage("user");
+  const currentUrl = location.pathname;
+  if (!user && currentUrl === "/profile") {
+    navigate("/login", render);
+    return;
+  }
+
+  document.body.innerHTML = `<div id="root">${App({ user })}</div>`;
   document.body.addEventListener("click", handleClick);
   document.body.addEventListener("submit", handleSubmit);
 };

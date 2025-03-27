@@ -17,7 +17,7 @@ export const ProfilePage = ({ user }) => {
               type="text"
               id="username"
               name="username"
-              value="${user.username}"
+              value="${user?.username || ""}"
               class="w-full p-2 border rounded"
             />
           </div>
@@ -32,7 +32,7 @@ export const ProfilePage = ({ user }) => {
               type="email"
               id="email"
               name="email"
-              value="${user.email}"
+              value="${user?.email || ""}"
               class="w-full p-2 border rounded"
             />
           </div>
@@ -46,7 +46,7 @@ export const ProfilePage = ({ user }) => {
               rows="4"
               class="w-full p-2 border rounded"
             >
-              ${user.bio}
+              ${user?.bio || ""}
             </textarea>
           </div>
           <button
