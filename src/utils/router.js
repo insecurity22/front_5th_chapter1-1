@@ -1,4 +1,4 @@
-export const navigate = (newPath, render) => {
+export const browserRouter = (newPath, render) => {
   history.pushState(null, "", newPath);
   render();
 };
