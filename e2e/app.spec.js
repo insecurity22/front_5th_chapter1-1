@@ -72,7 +72,7 @@ test.describe("SPA 기본 기능", () => {
     await login(page);
 
     // 프로필 페이지 접근
-    await page.goto("/profile");
+    await page.goto("/index.hash.html#/profile");
 
     // 프로필 정보 확인
     await expect(page.locator("#username")).toHaveValue("testuser");
