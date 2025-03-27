@@ -1,4 +1,4 @@
-import { MainPage } from "./pages/MainPage";
+import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { NotFound } from "./components/NotFound";
@@ -11,7 +11,7 @@ import {
 } from "./utils/storage";
 
 const routes = {
-  "/": MainPage,
+  "/": HomePage,
   "/login": LoginPage,
   "/profile": ProfilePage,
 };
