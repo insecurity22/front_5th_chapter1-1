@@ -1,4 +1,8 @@
-export const ProfilePage = ({ user }) => {
+import { Router } from "../utils/router";
+
+export const ProfilePage = () => {
+  const auth = Router.getAuth();
+
   return `
     <main class="p-4">
       <div class="bg-white p-8 rounded-lg shadow-md">
@@ -17,7 +21,7 @@ export const ProfilePage = ({ user }) => {
               type="text"
               id="username"
               name="username"
-              value="${user?.username || ""}"
+              value="${auth?.username || ""}"
               class="w-full p-2 border rounded"
             />
           </div>
@@ -32,7 +36,7 @@ export const ProfilePage = ({ user }) => {
               type="email"
               id="email"
               name="email"
-              value="${user?.email || ""}"
+              value="${auth?.email || ""}"
               class="w-full p-2 border rounded"
             />
           </div>
@@ -46,7 +50,7 @@ export const ProfilePage = ({ user }) => {
               rows="4"
               class="w-full p-2 border rounded"
             >
-              ${user?.bio || ""}
+              ${auth?.bio || ""}
             </textarea>
           </div>
           <button

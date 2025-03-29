@@ -1,9 +1,13 @@
-const isHashRouter = location.hash;
-const currentPath = isHashRouter ? location.hash.slice(1) : location.pathname;
-const isActive = (path) =>
-  currentPath === path ? "font-bold text-blue-600" : "text-gray-600";
+import { Router } from "../utils/router";
 
-export const Header = ({ user }) => {
+export const Header = () => {
+  const auth = Router.getAuth();
+
+  const isActive = (path) =>
+    Router.getCurrentPath() === path
+      ? "font-bold text-blue-600"
+      : "text-gray-600";
+
   return ` 
     <header class="bg-blue-600 text-white p-4 sticky top-0">
       <h1 class="text-2xl font-bold">항해플러스</h1>
@@ -16,7 +20,7 @@ export const Header = ({ user }) => {
         <li>
           <a href="/login"
             ${
-              user
+              auth
                 ? ` id="logout">로그아웃`
                 : ` class="${isActive("/login")}">로그인`
             }
