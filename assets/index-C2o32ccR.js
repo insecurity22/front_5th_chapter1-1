@@ -1,4 +1,4 @@
-(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const o of document.querySelectorAll('link[rel="modulepreload"]'))n(o);new MutationObserver(o=>{for(const s of o)if(s.type==="childList")for(const a of s.addedNodes)a.tagName==="LINK"&&a.rel==="modulepreload"&&n(a)}).observe(document,{childList:!0,subtree:!0});function l(o){const s={};return o.integrity&&(s.integrity=o.integrity),o.referrerPolicy&&(s.referrerPolicy=o.referrerPolicy),o.crossOrigin==="use-credentials"?s.credentials="include":o.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function n(o){if(o.ep)return;o.ep=!0;const s=l(o);fetch(o.href,s)}})();const c=()=>`
+(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const o of document.querySelectorAll('link[rel="modulepreload"]'))a(o);new MutationObserver(o=>{for(const s of o)if(s.type==="childList")for(const i of s.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&a(i)}).observe(document,{childList:!0,subtree:!0});function l(o){const s={};return o.integrity&&(s.integrity=o.integrity),o.referrerPolicy&&(s.referrerPolicy=o.referrerPolicy),o.crossOrigin==="use-credentials"?s.credentials="include":o.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function a(o){if(o.ep)return;o.ep=!0;const s=l(o);fetch(o.href,s)}})();const u=()=>`
   <main class="p-4">
     <div class="mb-4 bg-white rounded-lg shadow p-4">
       <textarea class="w-full p-2 border rounded" placeholder="무슨 생각을 하고 계신가요?"></textarea>
@@ -88,13 +88,13 @@
       </div>
     </div>
   </main>
-`,u=()=>`
+`,b=()=>`
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input id="username" name="username" type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded" required>
+          <input id="username" name="username" type="text" placeholder="사용자 이름" class="w-full p-2 border rounded" required>
         </div>
         <div class="mb-6">
           <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded" required>
@@ -110,7 +110,7 @@
       </div>
     </div>
   </main>
-`,b=({user:t})=>`
+`,m=({user:t})=>`
     <main class="p-4">
       <div class="bg-white p-8 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
@@ -169,7 +169,7 @@
         </form>
       </div>
     </main>
-  `,m=()=>`
+  `,p=()=>`
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full text-center" style="max-width: 480px">
       <h1 class="text-2xl font-bold text-blue-600 mb-4">항해플러스</h1>
@@ -183,30 +183,32 @@
       </a>
     </div>
   </main>
-`,p=()=>`
+`,f=()=>`
 <footer class="bg-gray-200 p-4 text-center">
   <p>&copy; 2024 항해플러스. All rights reserved.</p>
 </footer>
-`,f=({user:t})=>{const e=l=>location.pathname===l?"text-blue-600":"text-gray-600";return`
+`,h=location.hash,g=h?location.hash.slice(1):location.pathname,d=t=>g===t?"font-bold text-blue-600":"text-gray-600",v=({user:t})=>` 
     <header class="bg-blue-600 text-white p-4 sticky top-0">
       <h1 class="text-2xl font-bold">항해플러스</h1>
     </header>
 
     <nav class="bg-white shadow-md p-2 sticky top-14">
       <ul class="flex justify-around">
-        <li><a href="/" class="${e("/")}">홈</a></li>
-        <li><a href="/profile" class="${e("/profile")}">프로필</a></li>
+        <li><a href="/" class="${d("/")}">홈</a></li>
+        <li><a href="/profile" class="${d("/profile")}">프로필</a></li>
         <li>
-            ${t?'<a href="/" id="logout" class="text-gray-600">로그아웃</a>':`<a href="/login" class="${e("/login")}">로그인</a>`}
-          </li>
+          <a href="/login"
+            ${t?' id="logout">로그아웃':` class="${d("/login")}">로그인`}
+          </a>
+        </li>
       </ul>
     </nav>
-  `},g=({children:t,user:e})=>`
+  `,x=({children:t,user:e})=>`
       <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="max-w-md w-full">
-          ${f({user:e})}
+          ${v({user:e})}
           ${t}
-          ${p()}
+          ${f()}
         </div>
       </div>
-  `,v={"/":c,"/login":u,"/profile":b},x=({user:t})=>{const e=location.pathname,l=v[e];if(!l)return m();const n=l({user:t});return e!=="/login"?g({children:n,user:t}):n},i=(t,e)=>{history.pushState(null,"",t),e()},h=t=>JSON.parse(localStorage.getItem(t)),d=(t,e)=>localStorage.setItem(t,JSON.stringify(e)),y=t=>localStorage.removeItem(t),w=t=>{const{target:e}=t;e.id==="logout"&&(y("user"),i("/",r)),e.tagName==="A"&&e.href&&(t.preventDefault(),i(e.href,r))},L=t=>{d("user",{username:t,email:"",bio:""}),i("/",r)},S=t=>{var n,o,s,a;const e=(o=(n=document.getElementById("email"))==null?void 0:n.value)==null?void 0:o.trim(),l=(a=(s=document.getElementById("bio"))==null?void 0:s.value)==null?void 0:a.trim();d("user",{username:t,email:e,bio:l}),alert("프로필이 업데이트 되었습니다.")},$=t=>{var l,n;t.preventDefault();const e=(n=(l=document.getElementById("username"))==null?void 0:l.value)==null?void 0:n.trim();e&&(t.target.id==="login-form"&&L(e),t.target.id==="profile-form"&&S(e))},r=()=>{const t=h("user"),e=location.pathname;if(!t&&e==="/profile"){i("/login",r);return}if(t&&e==="/login"){i("/",r);return}document.body.innerHTML=`<div id="root">${x({user:t})}</div>`,document.body.addEventListener("click",w),document.body.addEventListener("submit",$)};window.addEventListener("popstate",r);r();
+  `,y={"/":u,"/login":b,"/profile":m},w=({user:t})=>{const l=location.hash?location.hash.slice(1):location.pathname,a=y[l];if(!a)return p();const o=a({user:t});return l.includes("login")?o:x({children:o,user:t})},r=(t,e)=>(history.pushState(null,"",t),e()),L=t=>JSON.parse(localStorage.getItem(t)),c=(t,e)=>localStorage.setItem(t,JSON.stringify(e)),P=t=>localStorage.removeItem(t),S=t=>{const{target:e}=t;e.id==="logout"&&(t.preventDefault(),P("user")),e.tagName==="A"&&e.href&&r(e.href,n)},$=t=>{c("user",{username:t,email:"",bio:""}),r("/",n)},j=t=>{var a,o,s,i;const e=(o=(a=document.getElementById("email"))==null?void 0:a.value)==null?void 0:o.trim(),l=(i=(s=document.getElementById("bio"))==null?void 0:s.value)==null?void 0:i.trim();c("user",{username:t,email:e,bio:l}),alert("프로필이 업데이트 되었습니다.")},E=t=>{var l,a;t.preventDefault();const e=(a=(l=document.getElementById("username"))==null?void 0:l.value)==null?void 0:a.trim();e&&(t.target.id==="login-form"&&$(e),t.target.id==="profile-form"&&j(e))},n=()=>{const t=L("user"),l=location.hash?location.hash.slice(1):location.pathname;!t&&l==="/profile"&&r("/login",n),t&&l==="/login"&&r("/",n),document.body.innerHTML=`<div id="root">${w({user:t})}</div>`,document.body.addEventListener("click",S),document.body.addEventListener("submit",E)};window.addEventListener("popstate",n);window.addEventListener("hashchange",n);n();
