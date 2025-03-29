@@ -1,8 +1,10 @@
-export const Header = ({ user }) => {
-  const isActive = (path) =>
-    location.pathname === path ? "text-blue-600" : "text-gray-600";
+const isHashRouter = location.hash;
+const currentPath = isHashRouter ? location.hash.slice(1) : location.pathname;
+const isActive = (path) =>
+  currentPath === path ? "font-bold text-blue-600" : "text-gray-600";
 
-  return `
+export const Header = ({ user }) => {
+  return ` 
     <header class="bg-blue-600 text-white p-4 sticky top-0">
       <h1 class="text-2xl font-bold">항해플러스</h1>
     </header>
@@ -12,12 +14,14 @@ export const Header = ({ user }) => {
         <li><a href="/" class="${isActive("/")}">홈</a></li>
         <li><a href="/profile" class="${isActive("/profile")}">프로필</a></li>
         <li>
+          <a href="/login"
             ${
               user
-                ? `<a href="/" id="logout" class="text-gray-600">로그아웃</a>`
-                : `<a href="/login" class="${isActive("/login")}">로그인</a>`
+                ? ` id="logout">로그아웃`
+                : ` class="${isActive("/login")}">로그인`
             }
-          </li>
+          </a>
+        </li>
       </ul>
     </nav>
   `;

@@ -11,16 +11,13 @@ const routes = {
 };
 
 export const App = ({ user }) => {
-  const currentUrl = location.pathname;
-  const pageComponent = routes[currentUrl];
-  if (!pageComponent) {
-    return NotFound();
-  }
+  const isHashRouter = location.hash;
+  const currentPath = isHashRouter ? location.hash.slice(1) : location.pathname;
 
+  const pageComponent = routes[currentPath] || NotFound;
   const page = pageComponent({ user });
-  if (currentUrl !== "/login") {
-    return RootLayout({ children: page, user });
-  }
 
-  return page;
+  return currentPath.includes("login")
+    ? page
+    : RootLayout({ children: page, user });
 };

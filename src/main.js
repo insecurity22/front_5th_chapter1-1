@@ -11,13 +11,12 @@ const handleClick = (event) => {
 
   const isLogout = target.id === "logout";
   if (isLogout) {
+    event.preventDefault();
     removeLocalStorage("user");
-    browserRouter("/", render);
   }
 
   const isLink = target.tagName === "A" && target.href;
   if (isLink) {
-    event.preventDefault();
     browserRouter(target.href, render);
   }
 };
@@ -27,7 +26,7 @@ const handleLogin = (username) => {
   browserRouter("/", render);
 };
 
-const handleProfile = (username) => {
+const handleProfileUpdate = (username) => {
   const email = document.getElementById("email")?.value?.trim();
   const bio = document.getElementById("bio")?.value?.trim();
 
@@ -46,21 +45,21 @@ const handleSubmit = (event) => {
   }
 
   if (event.target.id === "profile-form") {
-    handleProfile(username);
+    handleProfileUpdate(username);
   }
 };
 
 export const render = () => {
   const user = getLocalStorage("user");
-  const currentUrl = location.pathname;
-  if (!user && currentUrl === "/profile") {
+  const isHashRouter = location.hash;
+  const currentPath = isHashRouter ? location.hash.slice(1) : location.pathname;
+
+  if (!user && currentPath === "/profile") {
     browserRouter("/login", render);
-    return;
   }
 
-  if (user && currentUrl === "/login") {
+  if (user && currentPath === "/login") {
     browserRouter("/", render);
-    return;
   }
 
   document.body.innerHTML = `<div id="root">${App({ user })}</div>`;
@@ -69,5 +68,6 @@ export const render = () => {
 };
 
 window.addEventListener("popstate", render);
+window.addEventListener("hashchange", render);
 
 render();
