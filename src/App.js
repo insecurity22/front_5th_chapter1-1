@@ -14,7 +14,10 @@ export const App = ({ user }) => {
   const isHashRouter = location.hash;
   const currentPath = isHashRouter ? location.hash.slice(1) : location.pathname;
 
-  const pageComponent = routes[currentPath] || NotFound;
+  const pageComponent = routes[currentPath];
+  if (!pageComponent) {
+    return NotFound();
+  }
   const page = pageComponent({ user });
 
   return currentPath.includes("login")
