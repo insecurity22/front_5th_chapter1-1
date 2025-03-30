@@ -14,8 +14,9 @@
         const path = window.location.pathname;
         const query = window.location.search;
 
+        const baseUrl = import.meta.env.VITE_BASE_PATH || '/';
         window.location.replace(
-          "/?redirect=" + encodeURIComponent(path + query) + "&redirected=true",
+          `${baseUrl}/?redirect=${encodeURIComponent(path + query)}&redirected=true`,
         );
       }
       redirectSPA();
