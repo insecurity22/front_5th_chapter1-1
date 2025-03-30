@@ -1,1 +1,0 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";function n(){var c;const t="/front_5th_chapter1-1/",o=(c=location.pathname)==null?void 0:c.replace(t,"");console.log(t,o);const e=`${t}#/${o}`;window.location.replace(e)}n();
