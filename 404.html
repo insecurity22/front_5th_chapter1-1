@@ -6,7 +6,11 @@
     <meta http-equiv="refresh" content="0;url=/" />
     <script>
       function redirectSPA() {
-        window.location.replace(window.location.pathname + "/");
+        const targetURL = window.location.origin + window.location.pathname;
+
+        if (!window.location.pathname.endsWith("/")) {
+          window.location.replace(targetURL);
+        }
       }
       redirectSPA();
     </script>
