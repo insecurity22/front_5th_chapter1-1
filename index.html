@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>항해플러스 SNS</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      function fixGitHubPagesRouting() {
+        if (!window.location.search) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get("p");
+        const query = urlParams.get("q");
+
+        if (page) {
+          const newUrl =
+            page + (query ? "?" + query : "") + window.location.hash;
+          window.history.replaceState(null, null, newUrl);
+        }
+      }
+
+      fixGitHubPagesRouting();
+    </script>
     <script type="module" crossorigin src="/front_5th_chapter1-1/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
     <script type="module" crossorigin src="/front_5th_chapter1-1/assets/main-Cgph998X.js"></script>
   </head>
