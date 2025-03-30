@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-B5Qt9EMX.js";import"./main-Cgph998X.js";function i(){var t;const a=(t=window.location.pathname)==null?void 0:t.replace(/\/$/,""),n=window.location.hash.substring(1),o=a+n;history.replaceState(null,null,o)}i();
