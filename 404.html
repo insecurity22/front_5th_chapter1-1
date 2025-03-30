@@ -6,11 +6,17 @@
     <meta http-equiv="refresh" content="0;url=/" />
     <script>
       function redirectSPA() {
-        const targetURL = window.location.origin + window.location.pathname;
-
-        if (!window.location.pathname.endsWith("/")) {
-          window.location.replace(targetURL);
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("redirected")) {
+          return;
         }
+
+        const path = window.location.pathname;
+        const query = window.location.search;
+
+        window.location.replace(
+          "/?redirect=" + encodeURIComponent(path + query) + "&redirected=true",
+        );
       }
       redirectSPA();
     </script>
