@@ -23,10 +23,10 @@
 
     <nav class="bg-white shadow-md p-2 sticky top-14">
       <ul class="flex justify-around">
-        <li><a href="/" class="${e("/")}">홈</a></li>
-        <li><a href="/profile" class="${e("/profile")}">프로필</a></li>
+        <li><a href="/#/" class="${e("/")}">홈</a></li>
+        <li><a href="/#/profile" class="${e("/profile")}">프로필</a></li>
         <li>
-          <a href="/login"
+          <a href="/#/login"
             ${t?' id="logout">로그아웃':` class="${e("/login")}">로그인`}
           </a>
         </li>
