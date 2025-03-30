@@ -1,19 +1,29 @@
 import { Router } from "./utils/router";
-import { removeLocalStorage, setLocalStorage } from "./utils/storage";
+import { setLocalStorage } from "./utils/storage";
 
 const handleClick = (event) => {
   const { target } = event;
-  const { id, tagName, href } = target;
+  const { id, tagName, href, pathname } = target;
 
   const isLogoutButtonClicked = id === "logout";
   if (isLogoutButtonClicked) {
-    event.preventDefault();
-    removeLocalStorage("user");
+    Router.clearAuth();
+  }
+
+  if (tagName === "BUTTON") {
+    return;
   }
 
   const isLinkClicked = tagName === "A" && href;
   if (isLinkClicked) {
-    Router.navigate(href);
+    event.preventDefault();
+
+    const isHashRouter = href?.includes("#");
+    if (isHashRouter) {
+      Router.navigate(href);
+    } else {
+      Router.navigate(pathname);
+    }
   }
 };
 
@@ -26,11 +36,10 @@ const handleProfileUpdate = (username) => {
 };
 
 const handleSubmit = (event) => {
-  event.preventDefault();
-
   const username = document.getElementById("username")?.value?.trim();
   if (!username) return;
 
+  event.preventDefault();
   if (event.target.id === "login-form") {
     setLocalStorage("user", { username, email: "", bio: "" });
     Router.navigate("/");

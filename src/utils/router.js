@@ -3,7 +3,7 @@ import { RootLayout } from "../layouts/RootLayout";
 import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import { ProfilePage } from "../pages/ProfilePage";
-import { getLocalStorage } from "./storage";
+import { getLocalStorage, removeLocalStorage } from "./storage";
 
 export const Router = {
   routes: {
@@ -13,24 +13,11 @@ export const Router = {
   },
 
   init({ onClick, onSubmit }) {
-    addEventListener("load", this.render.bind(this));
     addEventListener("click", onClick);
     addEventListener("submit", onSubmit);
     addEventListener("popstate", this.render.bind(this));
     addEventListener("hashchange", this.render.bind(this));
 
-    const isRouteGuardPassed = this.routeGuard();
-    if (isRouteGuardPassed) {
-      this.render();
-    }
-  },
-
-  navigate(path, useHash = location.hash) {
-    if (useHash) {
-      location.hash = path;
-    } else {
-      history.pushState(null, "", path);
-    }
     this.render();
   },
 
@@ -38,12 +25,12 @@ export const Router = {
     const auth = this.getAuth();
     const currentPath = this.getCurrentPath();
 
-    const isUnAuthorized = !auth && currentPath.includes("/profile");
+    const isUnAuthorized = !auth && currentPath.includes("profile");
     if (isUnAuthorized) {
       return this.navigate("/login");
     }
 
-    const isAlreadyLoggedIn = auth && currentPath.includes("/login");
+    const isAlreadyLoggedIn = auth && currentPath.includes("login");
     if (isAlreadyLoggedIn) {
       return this.navigate("/");
     }
@@ -51,38 +38,67 @@ export const Router = {
     return true;
   },
 
-  render() {
-    const currentPath = this.getCurrentPath();
-    const currentComponent = this.routes[currentPath];
-
-    console.log(currentPath, currentComponent);
-
-    let page = null;
-    if (!currentComponent) {
-      page = NotFound();
-    } else if (currentPath.includes("login")) {
-      page = LoginPage();
-    } else {
-      page = RootLayout({ children: currentComponent() });
+  getComponent(path) {
+    const isPage = this.routes[path];
+    const isLoginPage = path.includes("login");
+    if (!isPage || isLoginPage) {
+      return (this.routes[path] || NotFound)();
     }
+
+    return RootLayout({ children: this.routes[path]() });
+  },
+
+  render() {
+    const isRouteGuardPassed = this.routeGuard();
+    if (!isRouteGuardPassed) return;
+
+    const currentPath = this.removeBasePath(this.getCurrentPath());
+    const page = this.getComponent(currentPath);
 
     document.body.innerHTML = `<div id="root">${page}</div>`;
   },
 
+  navigate(path, isHashRouter = path?.startsWith("#")) {
+    let finalPath = path;
+
+    if (isHashRouter) {
+      location.hash = finalPath;
+    } else {
+      const basePath = this.getBasePath()?.replace(/\/$/, "");
+      const hasBashPath = path.includes(basePath);
+      if (!hasBashPath) {
+        finalPath = basePath + path;
+      }
+
+      history.pushState(null, "", finalPath);
+    }
+
+    this.render();
+  },
+
+  // TODO: Auth 처리 로직 빼기
   getAuth() {
     return getLocalStorage("user");
   },
 
+  clearAuth() {
+    return removeLocalStorage("user");
+  },
+
   getBasePath() {
-    return import.meta.env.VITE_BASE_URL;
+    return import.meta.env.VITE_BASE_PATH || "/";
+  },
+
+  removeBasePath(path) {
+    return path?.replace(this.getBasePath(), "/");
   },
 
   getCurrentPath() {
     const isHashRouter = location.hash;
     if (isHashRouter) {
-      return location.hash.slice(1)?.replace(this.getBasePath(), "/");
+      return this.removeBasePath(location.hash?.slice(1));
     }
 
-    return location.pathname?.replace(this.getBasePath(), "/");
+    return this.removeBasePath(location.pathname);
   },
 };

@@ -14,7 +14,7 @@ export const Header = () => {
     </header>
 
     <nav class="bg-white shadow-md p-2 sticky top-14">
-      <ul class="flex justify-around">
+      <ul class="flex justify-around [&_li]:text-gray-600">
         <li><a href="/" class="${isActive("/")}">홈</a></li>
         <li><a href="/profile" class="${isActive("/profile")}">프로필</a></li>
         <li>
