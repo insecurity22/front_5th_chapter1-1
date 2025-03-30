@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-B5Qt9EMX.js";function t(){if(new URLSearchParams(window.location.search).get("redirected"))return;const e=window.location.pathname,r=window.location.search;window.location.replace(`/front_5th_chapter1-1//?redirect=${encodeURIComponent(e+r)}&redirected=true`)}t();
