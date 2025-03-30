@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-B5Qt9EMX.js";import"./main-Cgph998X.js";const t="/front_5th_chapter1-1/",a=t.replace(/\/$/,""),o=window.location.hash.substring(1),s=`${a}${o}`;history.replaceState(null,null,s);
