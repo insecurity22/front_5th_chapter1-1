@@ -59,8 +59,18 @@
     </style>
     <script>
       function redirectSPA() {
-        // const baseUrl = import.meta.env.VITE_BASE_PATH || '/';
-        window.location.replace(window.location.pathname + "/");
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("redirected")) {
+          return;
+        }
+
+        const path = window.location.pathname;
+        const query = window.location.search;
+
+        const baseUrl = import.meta.env.VITE_BASE_PATH || '/';
+        window.location.replace(
+          `${baseUrl}/?redirect=${encodeURIComponent(path + query)}&redirected=true`,
+        );
       }
       redirectSPA();
     </script>
